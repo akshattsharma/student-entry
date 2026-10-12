@@ -30,15 +30,23 @@ function App() {
     });
   };
 
+  const handleRemove = (indexToRemove) => {
+    setStudents((prev) => prev.filter((_, idx) => idx !== indexToRemove));
+  };
+
   return (
-    <div className="App" style={{ padding: "20px" }}>
+    <div className="App">
+      <h1>Student Entry Form</h1>
+      <p>Enter student details below</p>
+
       <form onSubmit={handleSubmit}>
         <div>
-          <label htmlFor="name">Name: </label>
+          <label htmlFor="name">Name</label>
           <input
             id="name"
             type="text"
             name="name"
+            placeholder="Enter Name"
             value={formData.name}
             onChange={handleChange}
             required
@@ -46,11 +54,12 @@ function App() {
         </div>
 
         <div>
-          <label htmlFor="age">Age: </label>
+          <label htmlFor="age">Age</label>
           <input
             id="age"
             type="number"
             name="age"
+            placeholder="Enter Age"
             value={formData.age}
             onChange={handleChange}
             required
@@ -58,40 +67,56 @@ function App() {
         </div>
 
         <div>
-          <label htmlFor="grade">Grade: </label>
-          <input
+          <label htmlFor="grade">Grade</label>
+          <select
             id="grade"
-            type="text"
             name="grade"
             value={formData.grade}
             onChange={handleChange}
             required
-          />
+          >
+            <option value="" disabled>Select Grade</option>
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
+            <option value="D">D</option>
+            <option value="E">E</option>
+          </select>
         </div>
 
         <button type="submit">Submit</button>
       </form>
 
-      {students.length > 0 && (
-        <table>
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Age</th>
-              <th>Grade</th>
-            </tr>
-          </thead>
-          <tbody>
-            {students.map((student, idx) => (
-              <tr key={idx}>
-                <td>{student.name}</td>
-                <td>{student.age}</td>
-                <td>{student.grade}</td>
+      <div className="students-section">
+        {students.length === 0 ? (
+          <p>No student added</p>
+        ) : (
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Age</th>
+                <th>Grade</th>
+                <th>Action</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
+            </thead>
+            <tbody>
+              {students.map((student, idx) => (
+                <tr key={idx}>
+                  <td>{student.name}</td>
+                  <td>{student.age}</td>
+                  <td>{student.grade}</td>
+                  <td>
+                    <button type="button" onClick={() => handleRemove(idx)}>
+                      Remove
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </div>
     </div>
   );
 }
