@@ -18,16 +18,20 @@ function App() {
     }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!formData.name || !formData.age || !formData.grade) return;
-
-    setStudents((prev) => [...prev, formData]);
+  const handleClear = () => {
     setFormData({
       name: "",
       age: "",
       grade: "",
     });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!formData.name || !formData.age || !formData.grade) return;
+
+    setStudents((prev) => [...prev, formData]);
+    handleClear();
   };
 
   const handleRemove = (indexToRemove) => {
@@ -37,7 +41,7 @@ function App() {
   return (
     <div className="App">
       <h1>Student Entry Form</h1>
-      <p>Enter student details below</p>
+      <p>Add students and review the list below.</p>
 
       <form onSubmit={handleSubmit}>
         <div>
@@ -46,7 +50,7 @@ function App() {
             id="name"
             type="text"
             name="name"
-            placeholder="Enter Name"
+            placeholder="e.g. MS Dhoni"
             value={formData.name}
             onChange={handleChange}
             required
@@ -59,7 +63,7 @@ function App() {
             id="age"
             type="number"
             name="age"
-            placeholder="Enter Age"
+            placeholder="e.g. 14"
             value={formData.age}
             onChange={handleChange}
             required
@@ -75,21 +79,26 @@ function App() {
             onChange={handleChange}
             required
           >
-            <option value="" disabled>Select Grade</option>
-            <option value="A">A</option>
-            <option value="B">B</option>
-            <option value="C">C</option>
-            <option value="D">D</option>
-            <option value="E">E</option>
+            <option value="">Select grade</option>
+            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((num) => (
+              <option key={num} value={num}>
+                {num}
+              </option>
+            ))}
           </select>
         </div>
 
-        <button type="submit">Submit</button>
+        <div className="button-group">
+          <button type="submit">Add Student</button>
+          <button type="button" onClick={handleClear}>
+            Clear
+          </button>
+        </div>
       </form>
 
       <div className="students-section">
         {students.length === 0 ? (
-          <p>No student added</p>
+          <p>No students added yet.</p>
         ) : (
           <table>
             <thead>
@@ -105,7 +114,7 @@ function App() {
                 <tr key={idx}>
                   <td>{student.name}</td>
                   <td>{student.age}</td>
-                  <td>{student.grade}</td>
+                  <td>Class {student.grade}</td>
                   <td>
                     <button type="button" onClick={() => handleRemove(idx)}>
                       Remove
